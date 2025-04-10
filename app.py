@@ -33,11 +33,26 @@ def calculate_fingerprint(smiles):
 
 # 将fingerprint数据保存为csv
 def save_input_data_with_fingerprint(data, project_dir, label_column):
-    fingerprints = data['SMILES'].apply(calculate_fingerprint)
-    fingerprint_df = pd.DataFrame(fingerprints.tolist())
-    data = data.drop(columns=['SMILES'])
-    data = pd.concat([data, fingerprint_df], axis=1)
-    data.to_csv(os.path.join(project_dir, "input.csv"), index=False)
+    columns_name = 'smiles' if 'smiles' in data.columns else ('SMILES' if 'SMILES' in data.columns else None)
+    
+    if columns_name is None:
+        st.write('Cannot find column named "smiles" or "SMILES" in the dataset!')
+        return
+    
+    # 计算fingerprints并合并到数据集中
+    fingerprints = data[columns_name].apply(calculate_fingerprint)
+    fingerprint_df = pd.DataFrame(fingerprints.tolist())  # 将fingerprints转换为DataFrame
+    
+    # 将标签列（label）添加到fingerprint数据框
+    fingerprint_df['label'] = data[label_column]
+    
+    # 保存结果为CSV文件
+    output_file = os.path.join(project_dir, "input.csv")
+    fingerprint_df.to_csv(output_file, index=False)
+    
+    # 返回保存的文件路径，方便后续操作
+    st.write(f"Fingerprint data saved to {output_file}")
+    return output_file
 
 # 训练并保存模型
 def train_and_save_model(data, label_column, project_dir, rf_params):
