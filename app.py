@@ -321,7 +321,7 @@ elif sidebar_option == "知识获取":
     from Bio import Entrez
     # 设置Entrez邮箱
     Entrez.email = "your_email@example.com"
-    keyword = "cancer"  # 搜索关键词
+    keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
     st.write(pmcid_list)
