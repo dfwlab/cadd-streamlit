@@ -335,6 +335,8 @@ elif sidebar_option == "查看已有项目":
 
 # 功能5:知识获取
 elif sidebar_option == "知识获取":
+    key = st.text_input("请输入您的OpenAI Key", "")
+    
     from Bio import Entrez
     # 设置Entrez邮箱
     Entrez.email = "your_email@example.com"
@@ -351,7 +353,7 @@ elif sidebar_option == "知识获取":
 
     
     from openai import OpenAI
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = key
     
     client = OpenAI()
     
