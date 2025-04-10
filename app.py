@@ -210,8 +210,8 @@ elif sidebar_option == "模型训练":
     # 设置RandomForest参数
     rf_params = {
         'n_estimators': st.sidebar.slider("随机森林 n_estimators", 50, 500, 100),
-        'max_depth': st.sidebar.slider("随机森林 max_depth", 3, 30, 10),
-        'max_features': st.sidebar.slider("随机森林 max_features", 0.1, 1.0, 0.1)
+        'max_depth': st.sidebar.slider("随机森林 max_depth", 1, 30, 3),
+        'max_features': st.sidebar.slider("随机森林 max_features", 0.1, 1.0, 0.2)
     }
 
     # 开始建模
