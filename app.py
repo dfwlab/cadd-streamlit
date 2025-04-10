@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+import os
+import glob
 import matplotlib.pyplot as plt
 import seaborn as sns
 import shap
@@ -23,6 +24,11 @@ st.markdown("""
         .stSelectbox>div {font-size: 16px; color: #00796b;}
     </style>
     """, unsafe_allow_html=True)
+
+# 自动查找 ./data 目录下的所有 CSV 文件
+def get_csv_files(directory="./data"):
+    csv_files = glob.glob(os.path.join(directory, "*.csv"))
+    return csv_files
 
 # Function to display dataset info
 def display_data_info(dataset):
@@ -74,31 +80,48 @@ def predict_new_molecule(smiles):
 # Streamlit UI
 st.title("Tox21数据集建模与预测应用")
 
-# 左侧边栏选择功能
-sidebar_option = st.sidebar.selectbox(
-    "选择功能",
-    ["数据展示", "模型训练", "活性预测"]
-)
+# 获取 ./data 目录下的所有CSV文件
+csv_files = get_csv_files()
 
-# 功能1：展示数据
-if sidebar_option == "数据展示":
-    dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])  # Example choice
-    if dataset_choice == "tox21":
-        data = pd.read_csv("tox21.csv")  # Replace with actual data loading code
+# 检查是否有CSV文件
+if not csv_files:
+    st.error("没有找到CSV文件，请确保 './data' 目录下有CSV文件")
+else:
+    # 左侧边栏选择功能
+    sidebar_option = st.sidebar.selectbox(
+        "选择功能",
+        ["数据展示", "模型训练", "活性预测"]
+    )
+
+    # 功能1：展示数据
+    if sidebar_option == "数据展示":
+        # 动态加载CSV文件
+        dataset_choice = st.sidebar.selectbox("选择数据集", [os.path.basename(file) for file in csv_files])  # 获取文件名
+
+        # 加载选定的数据集
+        selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
+        data = pd.read_csv(selected_file)
+        
+        # 显示数据集概况
         display_data_info(data)
 
-# 功能2：训练模型
-elif sidebar_option == "模型训练":
-    dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])
-    label_column = st.sidebar.text_input("输入标签列名", "tox21_label")
-    
-    if st.sidebar.button("训练模型"):
-        if dataset_choice == "tox21":
-            data = pd.read_csv("tox21.csv")
+    # 功能2：训练模型
+    elif sidebar_option == "模型训练":
+        # 动态加载CSV文件
+        dataset_choice = st.sidebar.selectbox("选择数据集", [os.path.basename(file) for file in csv_files])  # 获取文件名
+
+        # 加载选定的数据集
+        selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
+        data = pd.read_csv(selected_file)
+        
+        # 用户输入标签列名
+        label_column = st.sidebar.text_input("输入标签列名", "tox21_label")
+        
+        if st.sidebar.button("训练模型"):
             train_model(data, label_column)
 
-# 功能3：进行预测
-elif sidebar_option == "活性预测":
-    smiles_input = st.sidebar.text_input("输入分子SMILES")
-    if st.sidebar.button("进行预测"):
-        predict_new_molecule(smiles_input)
+    # 功能3：进行预测
+    elif sidebar_option == "活性预测":
+        smiles_input = st.sidebar.text_input("输入分子SMILES")
+        if st.sidebar.button("进行预测"):
+            predict_new_molecule(smiles_input)
