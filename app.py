@@ -344,6 +344,6 @@ elif sidebar_option == "知识获取":
     st.write(pmcid_list)
     for pmcid in pmcid_list:
         article_details = fetch_article_details(pmcid)
-        full_text = extract_full_text(article_details)
         st.write(pmcid)
-        st.write(full_text)
+        st.write(article_details)
+        #full_text = extract_full_text(article_details)
