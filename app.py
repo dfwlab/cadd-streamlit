@@ -241,7 +241,7 @@ elif sidebar_option == "活性预测":
             # 输入SMILES并进行预测
             smiles_input = st.text_input("输入分子SMILES")
             if smiles_input:
-                fingerprint = calculate_fingerprint(smiles_input)
+                fingerprint = mol_to_fp(smiles_input)
                 if fingerprint is not None:
                     prediction = model.predict([fingerprint])
                     st.write(f"预测结果：{prediction[0]}")
