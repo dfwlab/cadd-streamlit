@@ -163,8 +163,31 @@ def display_existing_projects():
         if os.path.exists(os.path.join(selected_project_dir, "feature_importance.png")):
             st.image(os.path.join(selected_project_dir, "feature_importance.png"))
 
+import shutil
+def delete_all_projects():
+    projects_dir = './projects'
+    
+    # 确保目录存在
+    if os.path.exists(projects_dir):
+        # 遍历目录下的所有文件和文件夹
+        for filename in os.listdir(projects_dir):
+            file_path = os.path.join(projects_dir, filename)
+            
+            # 如果是文件，删除文件
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"文件已删除: {file_path}")
+            # 如果是文件夹，删除文件夹及其内容
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+                print(f"文件夹已删除: {file_path}")
+    else:
+        print("没有找到projects目录。")
+
+delete_all_projects()
+
 # Streamlit UI
-st.title("Tox21数据集建模与预测应用")
+st.title("2025CADD课程实践")
 
 # 左侧边栏选择功能
 sidebar_option = st.sidebar.selectbox(
