@@ -356,7 +356,7 @@ elif sidebar_option == "知识获取":
     client = OpenAI()
     
     response = client.responses.create(
-        model="gpt-4o",
+        model="gpt-4",
         input="Write a one-sentence bedtime story about a unicorn."
     )
     
