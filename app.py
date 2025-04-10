@@ -211,7 +211,7 @@ elif sidebar_option == "模型训练":
     rf_params = {
         'n_estimators': st.sidebar.slider("随机森林 n_estimators", 50, 500, 100),
         'max_depth': st.sidebar.slider("随机森林 max_depth", 3, 30, 10),
-        'max_features': st.sidebar.slider("随机森林 max_features", 0.1, 0.9, 10)
+        'max_features': st.sidebar.slider("随机森林 max_features", 0.1, 1.0, 0.1)
     }
 
     # 开始建模
