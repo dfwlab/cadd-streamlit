@@ -359,15 +359,11 @@ elif sidebar_option == "知识获取":
     
     query = "请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n" + document_text
     
-    response = openai.Completion.create(
-      model="gpt-4",  # 使用GPT-4模型
-      prompt=query,
-      max_tokens=500,  # 控制返回的token数
-      temperature=0.7,  # 控制回答的多样性
-      n=1,  # 返回1个结果
-      stop=None,  # 没有停止符
+    client = openai.OpenAI()
+    
+    response = client.responses.create(
+        model="gpt-4",
+        input=query
     )
     
-    # 打印模型生成的结果
-    result = response.choices[0].text.strip()
-    print(result)
+    st.write(response.output_text)
