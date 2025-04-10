@@ -129,7 +129,6 @@ def train_and_save_model(fp_file, project_dir, rf_params):
 
     # 保存评估结果
     confusion = confusion_matrix(y_test, y_pred)
-    st.write(f"模型准确率：{acc:.4f}")
     # 保存混淆矩阵图
     fig, ax = plt.subplots()
     sns.heatmap(confusion, annot=True, fmt="d", cmap="Blues", ax=ax)
@@ -147,7 +146,7 @@ def train_and_save_model(fp_file, project_dir, rf_params):
     plt.savefig(os.path.join(project_dir, "feature_importance.png"))
     st.image(os.path.join(project_dir, "feature_importance.png"))
     
-    return model, acc
+    return model, acc, roc_auc
 
 # 查看已有的项目
 def display_existing_projects():
@@ -223,10 +222,10 @@ elif sidebar_option == "模型训练":
         fp_file = save_input_data_with_fingerprint(data, project_dir, label_column)
         
         # 训练模型并保存结果
-        model, acc = train_and_save_model(fp_file, project_dir, rf_params)
+        model, acc, roc_auc = train_and_save_model(fp_file, project_dir, rf_params)
         
         # 显示训练结果
-        st.write(f"训练完成，模型准确率：{acc:.4f}")
+        st.write(f"训练完成，模型准确率(Accuracy): {acc:.4f}; 模型AUC: {roc_auc:.4f}")
         st.success(f"模型已保存到：{os.path.join(project_dir, 'model.pkl')}")
 
 # 功能3：进行预测
