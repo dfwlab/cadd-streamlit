@@ -25,45 +25,35 @@ def create_project_directory():
     os.makedirs(project_dir, exist_ok=True)
     return project_dir
 
-# 计算fingerprint
-def calculate_fingerprint(smiles):
-    # 尝试生成分子对象
+# 初始化Fingerprint生成器
+fpgen = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
+# 定义新的Fingerprint转换函数
+def mol_to_fp(smiles):
     mol = Chem.MolFromSmiles(smiles)
-    
-    # 检查分子对象是否有效
-    if mol is None:
+    if mol:
+        fp = fpgen.GetFingerprint(mol)
+        arr = np.zeros((1,))
+        DataStructs.ConvertToNumpyArray(fp, arr)
+        return arr
+    else:
         st.warning(f"无法解析SMILES: {smiles}")
         return [None] * 2048  # 返回一个全为None的fingerprint，表示解析失败
-    
-    # 计算fingerprint（Morgan Fingerprint）
-    fingerprint = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)
-    return list(fingerprint)
 
 # 将fingerprint数据保存为csv
 def save_input_data_with_fingerprint(data, project_dir, label_column):
     # 检查SMILES列（考虑大小写不一致）
     columns_name = 'smiles' if 'smiles' in data.columns else ('SMILES' if 'SMILES' in data.columns else None)
-    
     if columns_name is None:
         st.write('Cannot find column named "smiles" or "SMILES" in the dataset!')
         return
-    
     # 计算fingerprints并合并到数据集中
-    fingerprints = data[columns_name].apply(calculate_fingerprint)
-    
-    # 删除所有fingerprint为None的行（即SMILES解析失败的行）
-    valid_fingerprints = fingerprints.apply(lambda x: x != [None] * 2048)
-    data = data[valid_fingerprints]
-    fingerprints = fingerprints[valid_fingerprints]
-    
+    fingerprints = data[columns_name].apply(mol_to_fp)
     # 创建DataFrame并添加标签列
     fingerprint_df = pd.DataFrame(fingerprints.tolist())
     fingerprint_df['label'] = data[label_column]
-    
     # 保存结果为CSV文件
     output_file = os.path.join(project_dir, "input.csv")
     fingerprint_df.to_csv(output_file, index=False)
-    
     # 返回保存的文件路径，方便后续操作
     st.write(f"Fingerprint data saved to {output_file}")
     return output_file
