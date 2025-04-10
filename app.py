@@ -361,7 +361,7 @@ elif sidebar_option == "知识获取":
         # 文献内容，假设已经以字符串形式提取
         document_text = str(article_details[0]['body']['sec'])
         # 提问模型以获取化合物的毒副作用信息
-        query = """请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n""" + document_text.replace('\n', '').replace('\n', '')[:1000]
+        query = """请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n""" + document_text.replace('\n', '').replace('\n', '')[:10000]
         st.write(query)
 
         response = client.responses.create(
