@@ -12,7 +12,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 import shap
 
 # 设置页面标题和图标
@@ -111,6 +111,23 @@ def train_and_save_model(fp_file, project_dir, rf_params):
     # 评估模型
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
+
+    # 计算AUC
+    y_test_bin = label_binarize(y_test, classes=model.classes_)
+    fpr, tpr, _ = roc_curve(y_test_bin, model.predict_proba(X_test)[:, 1])
+    roc_auc = auc(fpr, tpr)
+    
+    # 绘制AUC曲线
+    fig, ax = plt.subplots()
+    ax.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+    ax.plot([0, 1], [0, 1], color='gray', linestyle='--')
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('Receiver Operating Characteristic (ROC) Curve')
+    ax.legend(loc='lower right')
+    plt.savefig(os.path.join(project_dir, "roc_curve.png"))
+    st.image(os.path.join(project_dir, "roc_curve.png"))
+
     # 保存评估结果
     confusion = confusion_matrix(y_test, y_pred)
     st.write(f"模型准确率：{acc:.4f}")
@@ -121,12 +138,15 @@ def train_and_save_model(fp_file, project_dir, rf_params):
     ax.set_ylabel("True labels")
     ax.set_title("Confusion Matrix")
     plt.savefig(os.path.join(project_dir, "confusion_matrix.png"))
+    st.image(os.path.join(project_dir, "confusion_matrix.png"))
+    
     # 特征重要性图
     feature_importances = model.feature_importances_
     fig, ax = plt.subplots()
     sns.barplot(x=list(X.columns), y=feature_importances, ax=ax)
     ax.set_title("Feature Importance")
     plt.savefig(os.path.join(project_dir, "feature_importance.png"))
+    st.image(os.path.join(project_dir, "feature_importance.png"))
     
     return model, acc
 
