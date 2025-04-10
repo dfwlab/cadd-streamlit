@@ -350,20 +350,12 @@ elif sidebar_option == "知识获取":
     #full_text = extract_full_text(article_details)
 
 
-    import openai
-    # 设置API密钥
-    openai.api_key = "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"
-    
-    # 文献内容，假设已经以字符串形式提取
-    document_text = str(article_details[0]['body']['sec'])
-    
-    query = "请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n" + document_text
-    
-    client = openai.OpenAI()
+    from openai import OpenAI
+    client = OpenAI()
     
     response = client.responses.create(
-        model="gpt-4",
-        input=query
+        model="gpt-4o",
+        input="Write a one-sentence bedtime story about a unicorn."
     )
     
     st.write(response.output_text)
