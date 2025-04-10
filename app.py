@@ -184,7 +184,7 @@ def delete_all_projects():
     else:
         print("没有找到projects目录。")
 
-delete_all_projects()
+#delete_all_projects()
 
 # Streamlit UI
 st.title("2025CADD课程实践")
