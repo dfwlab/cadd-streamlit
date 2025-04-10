@@ -20,6 +20,46 @@ import shap
 # 设置页面标题和图标
 st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
 
+# 显示数据集概况的函数
+def display_data_summary(data):
+    st.subheader("数据集概况")
+
+    # 显示数据的基本信息和描述性统计
+    st.write("数据的基本信息：")
+    st.write(data.info())
+
+    st.write("描述性统计：")
+    st.write(data.describe())
+
+    # 选择数值型列进行分布绘图
+    numeric_columns = data.select_dtypes(include=['number']).columns.tolist()
+
+    # 绘制每个数值型特征的直方图
+    st.subheader("数值型特征的分布")
+    for col in numeric_columns:
+        st.write(f"{col} 的分布：")
+        fig, ax = plt.subplots()
+        sns.histplot(data[col], kde=True, ax=ax)
+        ax.set_title(f"{col} 的直方图")
+        st.pyplot(fig)
+
+    # 绘制箱线图，查看是否有异常值
+    st.subheader("数值型特征的箱线图")
+    for col in numeric_columns:
+        st.write(f"{col} 的箱线图：")
+        fig, ax = plt.subplots()
+        sns.boxplot(x=data[col], ax=ax)
+        ax.set_title(f"{col} 的箱线图")
+        st.pyplot(fig)
+
+    # 如果有多个数值型特征，可以绘制散点图矩阵
+    if len(numeric_columns) > 1:
+        st.subheader("数值型特征间的关系：散点图矩阵")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.pairplot(data[numeric_columns], ax=ax)
+        st.pyplot(fig)
+        
+
 # 创建项目目录并命名
 def create_project_directory():
     project_name = datetime.now().strftime("%Y-%m-%d-%H-%M") + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
@@ -163,6 +203,7 @@ def display_existing_projects():
         if os.path.exists(os.path.join(selected_project_dir, "feature_importance.png")):
             st.image(os.path.join(selected_project_dir, "feature_importance.png"))
 
+
 import shutil
 def delete_all_projects():
     projects_dir = './projects'
@@ -206,8 +247,7 @@ if sidebar_option == "数据展示":
     data = pd.read_csv(selected_file)
     
     # 显示数据集概况
-    st.subheader("数据集概况")
-    st.write(data.describe())
+    display_data_summary(data)
 
 # 功能2：训练模型
 elif sidebar_option == "模型训练":
