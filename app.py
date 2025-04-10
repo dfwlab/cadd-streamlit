@@ -218,6 +218,23 @@ def search_pmc(keyword):
     record = Entrez.read(handle)
     return record["IdList"]
 
+# 获取文章详细信息
+def fetch_article_details(pmcid):
+    handle = Entrez.efetch(db="pmc", id=pmcid, retmode="xml")
+    record = Entrez.read(handle)
+    return record
+
+# 获取全文链接
+def extract_full_text(article_record):
+    # 根据具体的XML结构提取文本部分
+    full_text = ""
+    for article in article_record:
+        for body in article.get("body", []):
+            full_text += body.get("text", "")
+    return full_text
+
+
+
 # Streamlit UI
 st.title("2025CADD课程实践")
 
@@ -325,3 +342,8 @@ elif sidebar_option == "知识获取":
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
     st.write(pmcid_list)
+    for pmcid in pmcid_list:
+        article_details = fetch_article_details(pmcid)
+        full_text = extract_full_text(article_details)
+        st.write(pmcid)
+        st.write(full_text)
