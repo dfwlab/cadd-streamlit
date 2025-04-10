@@ -351,4 +351,26 @@ elif sidebar_option == "知识获取":
 
 
     import openai
+    # 设置API密钥
+    openai.api_key = "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"
     
+    # 文献内容，假设已经以字符串形式提取
+    document_text = article_details[0]['body']['sec']
+    
+    # 提问模型以获取化合物的毒副作用信息
+    query = """
+    请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n
+    """ + document_text
+    
+    response = openai.Completion.create(
+      model="gpt-4",  # 使用GPT-4模型
+      prompt=query,
+      max_tokens=500,  # 控制返回的token数
+      temperature=0.7,  # 控制回答的多样性
+      n=1,  # 返回1个结果
+      stop=None,  # 没有停止符
+    )
+    
+    # 打印模型生成的结果
+    result = response.choices[0].text.strip()
+    print(result)
