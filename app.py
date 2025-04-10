@@ -351,7 +351,7 @@ elif sidebar_option == "知识获取":
 
     
     from openai import OpenAI
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = "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"
     
     client = OpenAI()
     
