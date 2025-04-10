@@ -10,6 +10,7 @@ from rdkit import Chem
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from datetime import datetime
 
 # 设置页面标题和图标
 st.set_page_config(page_title="Tox21数据集应用", page_icon="🔬")
@@ -42,7 +43,7 @@ def display_data_info(dataset):
     st.pyplot(fig)
 
 # Function to train and save a model
-def train_model(dataset, label_column):
+def train_model(dataset, label_column, dataset_name):
     X = dataset.drop(columns=[label_column])
     y = dataset[label_column]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
@@ -54,14 +55,26 @@ def train_model(dataset, label_column):
     acc = accuracy_score(y_test, y_pred)
     st.write(f"模型准确率：{acc:.4f}")
     
-    # Save the model
-    joblib.dump(model, 'tox21_model.pkl')
-    st.success("模型已保存")
+    # 获取当前时间并生成模型文件名
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M")
+    model_filename = f"{dataset_name}_{current_time}.pkl"
+    
+    # 保存模型到 ./model 目录
+    model_path = os.path.join("./model", model_filename)
+    joblib.dump(model, model_path)
+    st.success(f"模型已保存至: {model_path}")
 
 # Function to predict using the saved model
 def predict_new_molecule(smiles):
     # Load the pre-trained model
-    model = joblib.load('tox21_model.pkl')
+    model_files = glob.glob("./model/*.pkl")
+    if not model_files:
+        st.error("未找到已保存的模型文件，请训练模型并保存！")
+        return
+    
+    # 选择模型
+    model_choice = st.selectbox("选择已保存的模型", model_files)
+    model = joblib.load(model_choice)
     
     # Convert SMILES to features (use RDKit or other methods)
     mol = Chem.MolFromSmiles(smiles)
@@ -114,11 +127,11 @@ else:
         selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
         data = pd.read_csv(selected_file)
         
-        # 用户输入标签列名
-        label_column = st.sidebar.text_input("输入标签列名", "tox21_label")
+        # 动态获取数据集的列名，并让用户选择标签列
+        label_column = st.sidebar.selectbox("选择标签列", data.columns.tolist())
         
         if st.sidebar.button("训练模型"):
-            train_model(data, label_column)
+            train_model(data, label_column, os.path.splitext(os.path.basename(selected_file))[0])
 
     # 功能3：进行预测
     elif sidebar_option == "活性预测":
