@@ -349,8 +349,10 @@ elif sidebar_option == "知识获取":
     st.write(article_details[0]['body']['sec'])
     #full_text = extract_full_text(article_details)
 
-
+    
     from openai import OpenAI
+    os.environ["OPENAI_API_KEY"] = "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"
+    
     client = OpenAI()
     
     response = client.responses.create(
