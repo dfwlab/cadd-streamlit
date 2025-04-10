@@ -351,15 +351,21 @@ elif sidebar_option == "知识获取":
     st.write(article_details[0]['body']['sec'])
     #full_text = extract_full_text(article_details)
 
-    
-    from openai import OpenAI
-    os.environ["OPENAI_API_KEY"] = key
-    
-    client = OpenAI()
-    
-    response = client.responses.create(
-        model="gpt-4",
-        input="Write a one-sentence bedtime story about a unicorn."
-    )
-    
-    st.write(response.output_text)
+
+    if key:
+        from openai import OpenAI
+        os.environ["OPENAI_API_KEY"] = key
+        
+        client = OpenAI()
+
+        # 文献内容，假设已经以字符串形式提取
+        document_text = str(article_details[0]['body']['sec'])
+        # 提问模型以获取化合物的毒副作用信息
+        query = """请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n""" + document_text
+
+        response = client.responses.create(
+            model="gpt-4",
+            input=query
+        )
+        
+        st.write(response.output_text)
