@@ -113,8 +113,7 @@ def train_and_save_model(fp_file, project_dir, rf_params):
     acc = accuracy_score(y_test, y_pred)
 
     # 计算AUC
-    y_test_bin = label_binarize(y_test, classes=model.classes_)
-    fpr, tpr, _ = roc_curve(y_test_bin, model.predict_proba(X_test)[:, 1])
+    fpr, tpr, _ = roc_curve(y_test, model.predict_proba(X_test)[:, 1])
     roc_auc = auc(fpr, tpr)
     
     # 绘制AUC曲线
