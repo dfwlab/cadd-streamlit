@@ -348,3 +348,7 @@ elif sidebar_option == "知识获取":
     st.write(f'Fecth article : {pmcid}')
     st.write(article_details[0]['body']['sec'])
     #full_text = extract_full_text(article_details)
+
+
+    import openai
+    
