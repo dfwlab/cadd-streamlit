@@ -69,71 +69,51 @@ def save_input_data_with_fingerprint(data, project_dir, label_column):
     return output_file
 
 # 删除缺失数据并确保数据是数值型
-def preprocess_data(data):
+def preprocess_data(fp_file):
+    data = pd.read_csv(fp_file)
     # 删除包含缺失值的行
     data = data.dropna()
-    
     # 确保数据都是数值型
     # 对于非数值型列，可以进行转换，例如使用OneHotEncoder等方法
     for col in data.select_dtypes(include=['object']).columns:
         data[col] = pd.to_numeric(data[col], errors='coerce')  # 转换成数值型，如果无法转换则置为NaN
-    
     # 删除包含NaN值的行（再次确保没有NaN）
     data = data.dropna()
-    
     return data
 
 # 训练并保存模型
-def train_and_save_model(data, label_column, project_dir, rf_params):
+def train_and_save_model(fp_file, project_dir, rf_params):
     # 预处理数据
-    data = preprocess_data(data)
-    
+    data = preprocess_data(fp_file)
     # 特征与标签分离
-    X = data.drop(columns=[label_column])
-    y = data[label_column]
-
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
     # 检查X和y的维度
     st.write("特征数据(X)形状：", X.shape)
     st.write("标签数据(y)形状：", y.shape)
-    
-    # 检查是否有空值
-    st.write("X中的空值：", X.isnull().sum().sum())
-    st.write("y中的空值：", y.isnull().sum())
-    
-    # 确保X和y没有空值
-    if X.isnull().sum().sum() > 0 or y.isnull().sum() > 0:
-        st.error("数据中存在空值，请处理后再尝试")
-        return None, None
-    
     # 划分训练集和测试集
     try:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     except ValueError as e:
         st.error(f"train_test_split 出错：{e}")
         return None, None
-    
     # 初始化模型
     model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'])
-    
     # 训练模型
     try:
         model.fit(X_train, y_train)
     except Exception as e:
         st.error(f"模型训练失败：{e}")
         return None, None
-    
     # 保存模型
     model_filename = "model.pkl"
     joblib.dump(model, os.path.join(project_dir, model_filename))
-    
     # 评估模型
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
-    
     # 保存评估结果
     confusion = confusion_matrix(y_test, y_pred)
     st.write(f"模型准确率：{acc:.4f}")
-    
     # 保存混淆矩阵图
     fig, ax = plt.subplots()
     sns.heatmap(confusion, annot=True, fmt="d", cmap="Blues", ax=ax)
@@ -141,7 +121,6 @@ def train_and_save_model(data, label_column, project_dir, rf_params):
     ax.set_ylabel("True labels")
     ax.set_title("Confusion Matrix")
     plt.savefig(os.path.join(project_dir, "confusion_matrix.png"))
-    
     # 特征重要性图
     feature_importances = model.feature_importances_
     fig, ax = plt.subplots()
@@ -222,10 +201,10 @@ elif sidebar_option == "模型训练":
         project_dir = create_project_directory()
 
         # 计算fingerprint并保存
-        save_input_data_with_fingerprint(data, project_dir, label_column)
+        fp_file = save_input_data_with_fingerprint(data, project_dir, label_column)
         
         # 训练模型并保存结果
-        model, acc = train_and_save_model(data, 'label', project_dir, rf_params)
+        model, acc = train_and_save_model(fp_file, project_dir, rf_params)
         
         # 显示训练结果
         st.write(f"训练完成，模型准确率：{acc:.4f}")
