@@ -36,27 +36,11 @@ def display_data_summary(data):
 
     # 绘制每个数值型特征的直方图
     st.subheader("数值型特征的分布")
-    for col in numeric_columns:
+    for col in numeric_columns[:3]:
         st.write(f"{col} 的分布：")
         fig, ax = plt.subplots()
         sns.histplot(data[col], kde=True, ax=ax)
-        ax.set_title(f"{col} 的直方图")
-        st.pyplot(fig)
-
-    # 绘制箱线图，查看是否有异常值
-    st.subheader("数值型特征的箱线图")
-    for col in numeric_columns:
-        st.write(f"{col} 的箱线图：")
-        fig, ax = plt.subplots()
-        sns.boxplot(x=data[col], ax=ax)
-        ax.set_title(f"{col} 的箱线图")
-        st.pyplot(fig)
-
-    # 如果有多个数值型特征，可以绘制散点图矩阵
-    if len(numeric_columns) > 1:
-        st.subheader("数值型特征间的关系：散点图矩阵")
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sns.pairplot(data[numeric_columns], ax=ax)
+        ax.set_title(f"{col}")
         st.pyplot(fig)
         
 
