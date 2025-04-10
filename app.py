@@ -8,8 +8,9 @@ import string
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
-from rdkit import Chem
 from rdkit.Chem import AllChem
+from rdkit.Chem import rdFingerprintGenerator
+from rdkit import Chem, DataStructs
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
