@@ -60,15 +60,31 @@ def predict_new_molecule(smiles):
 # Streamlit UI
 st.title("Tox21数据集建模与预测应用")
 
-dataset_choice = st.selectbox("选择数据集", ["tox21", "其他数据集"])  # Example choice
-if dataset_choice == "tox21":
-    data = pd.read_csv("tox21.csv")  # Replace with actual data loading code
-    display_data_info(data)
+# Sidebar for selecting options
+sidebar_option = st.sidebar.selectbox(
+    "选择功能",
+    ["展示数据", "训练模型", "进行预测"]
+)
 
-label_column = st.text_input("输入标签列名", "tox21_label")
-if st.button("训练模型"):
-    train_model(data, label_column)
+# 功能1：展示数据
+if sidebar_option == "展示数据":
+    dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])  # Example choice
+    if dataset_choice == "tox21":
+        data = pd.read_csv("tox21.csv")  # Replace with actual data loading code
+        display_data_info(data)
 
-smiles_input = st.text_input("输入分子SMILES")
-if st.button("进行预测"):
-    predict_new_molecule(smiles_input)
+# 功能2：训练模型
+elif sidebar_option == "训练模型":
+    dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])
+    label_column = st.sidebar.text_input("输入标签列名", "tox21_label")
+    
+    if st.sidebar.button("训练模型"):
+        if dataset_choice == "tox21":
+            data = pd.read_csv("tox21.csv")
+            train_model(data, label_column)
+
+# 功能3：进行预测
+elif sidebar_option == "进行预测":
+    smiles_input = st.sidebar.text_input("输入分子SMILES")
+    if st.sidebar.button("进行预测"):
+        predict_new_molecule(smiles_input)
