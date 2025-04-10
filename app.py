@@ -16,6 +16,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 import shap
+from Bio import Entrez
+from openai import OpenAI
 
 # 设置页面标题和图标
 st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
@@ -187,30 +189,6 @@ def display_existing_projects():
         if os.path.exists(os.path.join(selected_project_dir, "feature_importance.png")):
             st.image(os.path.join(selected_project_dir, "feature_importance.png"))
 
-
-import shutil
-def delete_all_projects():
-    projects_dir = './projects'
-    
-    # 确保目录存在
-    if os.path.exists(projects_dir):
-        # 遍历目录下的所有文件和文件夹
-        for filename in os.listdir(projects_dir):
-            file_path = os.path.join(projects_dir, filename)
-            
-            # 如果是文件，删除文件
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-                print(f"文件已删除: {file_path}")
-            # 如果是文件夹，删除文件夹及其内容
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-                print(f"文件夹已删除: {file_path}")
-    else:
-        print("没有找到projects目录。")
-
-#delete_all_projects()
-
 # 查询PubMed Central (PMC) 数据库
 def search_pmc(keyword):
     search_term = keyword  # 输入搜索关键词
@@ -337,7 +315,6 @@ elif sidebar_option == "查看已有项目":
 elif sidebar_option == "知识获取":
     key = st.text_input("请输入您的OpenAI Key", "")
     
-    from Bio import Entrez
     # 设置Entrez邮箱
     Entrez.email = "your_email@example.com"
     keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
@@ -351,13 +328,9 @@ elif sidebar_option == "知识获取":
     st.write(article_details[0]['body']['sec'])
     #full_text = extract_full_text(article_details)
 
-
     if key:
-        from openai import OpenAI
         os.environ["OPENAI_API_KEY"] = key
-        
         client = OpenAI()
-
         # 文献内容，假设已经以字符串形式提取
         document_text = str(article_details[0]['body']['sec'])
         # 提问模型以获取化合物的毒副作用信息
@@ -368,5 +341,4 @@ elif sidebar_option == "知识获取":
             model="gpt-4",
             input=query
         )
-        
         st.write(response.output_text)
