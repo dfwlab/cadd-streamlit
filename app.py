@@ -98,7 +98,7 @@ def train_and_save_model(fp_file, project_dir, rf_params):
         st.error(f"train_test_split 出错：{e}")
         return None, None
     # 初始化模型
-    model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'], random_state=42)
+    model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'], max_features=rf_params['max_features'], random_state=42)
     # 训练模型
     try:
         model.fit(X_train, y_train)
@@ -211,6 +211,7 @@ elif sidebar_option == "模型训练":
     rf_params = {
         'n_estimators': st.sidebar.slider("随机森林 n_estimators", 50, 500, 100),
         'max_depth': st.sidebar.slider("随机森林 max_depth", 3, 30, 10)
+        'max_features': st.sidebar.slider("随机森林 max_features", 0.1, 0.9, 10)
     }
 
     # 开始建模
