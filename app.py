@@ -27,12 +27,21 @@ def create_project_directory():
 
 # 计算fingerprint
 def calculate_fingerprint(smiles):
+    # 尝试生成分子对象
     mol = Chem.MolFromSmiles(smiles)
-    fingerprint = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)  # Morgan Fingerprint (radius 2)
+    
+    # 检查分子对象是否有效
+    if mol is None:
+        st.warning(f"无法解析SMILES: {smiles}")
+        return [None] * 2048  # 返回一个全为None的fingerprint，表示解析失败
+    
+    # 计算fingerprint（Morgan Fingerprint）
+    fingerprint = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)
     return list(fingerprint)
 
 # 将fingerprint数据保存为csv
 def save_input_data_with_fingerprint(data, project_dir, label_column):
+    # 检查SMILES列（考虑大小写不一致）
     columns_name = 'smiles' if 'smiles' in data.columns else ('SMILES' if 'SMILES' in data.columns else None)
     
     if columns_name is None:
@@ -41,9 +50,14 @@ def save_input_data_with_fingerprint(data, project_dir, label_column):
     
     # 计算fingerprints并合并到数据集中
     fingerprints = data[columns_name].apply(calculate_fingerprint)
-    fingerprint_df = pd.DataFrame(fingerprints.tolist())  # 将fingerprints转换为DataFrame
     
-    # 将标签列（label）添加到fingerprint数据框
+    # 删除所有fingerprint为None的行（即SMILES解析失败的行）
+    valid_fingerprints = fingerprints.apply(lambda x: x != [None] * 2048)
+    data = data[valid_fingerprints]
+    fingerprints = fingerprints[valid_fingerprints]
+    
+    # 创建DataFrame并添加标签列
+    fingerprint_df = pd.DataFrame(fingerprints.tolist())
     fingerprint_df['label'] = data[label_column]
     
     # 保存结果为CSV文件
