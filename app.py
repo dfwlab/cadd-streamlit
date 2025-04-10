@@ -93,12 +93,12 @@ def train_and_save_model(fp_file, project_dir, rf_params):
     st.write("标签数据(y)形状：", y.shape)
     # 划分训练集和测试集
     try:
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     except ValueError as e:
         st.error(f"train_test_split 出错：{e}")
         return None, None
     # 初始化模型
-    model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'])
+    model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'], random_state=42)
     # 训练模型
     try:
         model.fit(X_train, y_train)
