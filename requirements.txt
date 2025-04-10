@@ -7,3 +7,4 @@ joblib
 rdkit
 shap
 biopython
+openai
