@@ -18,7 +18,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 import shap
 
 # 设置页面标题和图标
-st.set_page_config(page_title="Tox21数据集应用", page_icon="🔬")
+st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
 
 # 创建项目目录并命名
 def create_project_directory():
@@ -223,9 +223,38 @@ elif sidebar_option == "模型训练":
 
 # 功能3：进行预测
 elif sidebar_option == "活性预测":
-    smiles_input = st.sidebar.text_input("输入分子SMILES")
-    if st.sidebar.button("进行预测"):
-        st.write("待实现预测功能")
+    # 列出已训练的项目
+    projects = glob.glob('./projects/*')
+    if not projects:
+        st.write("没有找到已训练的项目")
+    else:
+        project_names = [os.path.basename(project) for project in projects]
+        project_name = st.selectbox("选择一个项目进行预测", project_names)
+        selected_project_dir = os.path.join("./projects", project_name)
+        
+        # 加载选择的项目中的模型
+        model_filename = os.path.join(selected_project_dir, "model.pkl")
+        if os.path.exists(model_filename):
+            model = joblib.load(model_filename)
+            st.write(f"加载模型：{model_filename}")
+            
+            # 输入SMILES并进行预测
+            smiles_input = st.text_input("输入分子SMILES")
+            if smiles_input:
+                fingerprint = calculate_fingerprint(smiles_input)
+                if fingerprint is not None:
+                    prediction = model.predict([fingerprint])
+                    st.write(f"预测结果：{prediction[0]}")
+                    
+                    # SHAP解释
+                    explainer = shap.TreeExplainer(model)
+                    shap_values = explainer.shap_values(fingerprint)
+                    shap.summary_plot(shap_values, features=fingerprint)
+                    st.pyplot()
+                else:
+                    st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
+        else:
+            st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
 
 # 功能4：查看已有项目
 elif sidebar_option == "查看已有项目":
