@@ -211,13 +211,20 @@ def delete_all_projects():
 
 #delete_all_projects()
 
+# 查询PubMed Central (PMC) 数据库
+def search_pmc(keyword):
+    search_term = keyword  # 输入搜索关键词
+    handle = Entrez.esearch(db="pmc", term=search_term, retmode="xml", retmax=5)  # 限制返回5篇文章
+    record = Entrez.read(handle)
+    return record["IdList"]
+
 # Streamlit UI
 st.title("2025CADD课程实践")
 
 # 左侧边栏选择功能
 sidebar_option = st.sidebar.selectbox(
     "选择功能",
-    ["数据展示", "模型训练", "活性预测", "查看已有项目"]
+    ["数据展示", "模型训练", "活性预测", "查看已有项目", "知识获取"]
 )
 
 # 功能1：展示数据
@@ -308,3 +315,13 @@ elif sidebar_option == "活性预测":
 # 功能4：查看已有项目
 elif sidebar_option == "查看已有项目":
     display_existing_projects()
+
+# 功能5:知识获取
+elif sidebar_option == "知识获取":
+    from Bio import Entrez
+    # 设置Entrez邮箱
+    Entrez.email = "your_email@example.com"
+    keyword = "cancer"  # 搜索关键词
+    pmcid_list = search_pmc(keyword)
+    st.write(f"关键词: {keyword}")
+    st.write(pmcid_list)
