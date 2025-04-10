@@ -244,7 +244,8 @@ elif sidebar_option == "活性预测":
                 fingerprint = mol_to_fp(smiles_input)
                 if fingerprint is not None:
                     prediction = model.predict([fingerprint])
-                    st.write(f"预测结果：{prediction[0]}")
+                    prob = model.predict_proba([fingerprint])[:, -1]
+                    st.write(f"预测结果: {prediction[0]}, 概率: {prob[0]}")
                     
                     # SHAP解释
                     explainer = shap.TreeExplainer(model)
