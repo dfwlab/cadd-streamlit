@@ -358,9 +358,7 @@ elif sidebar_option == "知识获取":
     document_text = article_details[0]['body']['sec']
     
     # 提问模型以获取化合物的毒副作用信息
-    query = """
-    请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n
-    """ + document_text
+    query = '请从以下文献中提取与毒副作用相关的化合物及其SMILES结构：\n' + document_text
     
     response = openai.Completion.create(
       model="gpt-4",  # 使用GPT-4模型
