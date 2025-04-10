@@ -68,13 +68,37 @@ def save_input_data_with_fingerprint(data, project_dir, label_column):
     st.write(f"Fingerprint data saved to {output_file}")
     return output_file
 
+# 删除缺失数据并确保数据是数值型
+def preprocess_data(data):
+    # 删除包含缺失值的行
+    data = data.dropna()
+    
+    # 确保数据都是数值型
+    # 对于非数值型列，可以进行转换，例如使用OneHotEncoder等方法
+    for col in data.select_dtypes(include=['object']).columns:
+        data[col] = pd.to_numeric(data[col], errors='coerce')  # 转换成数值型，如果无法转换则置为NaN
+    
+    # 删除包含NaN值的行（再次确保没有NaN）
+    data = data.dropna()
+    
+    return data
+
 # 训练并保存模型
 def train_and_save_model(data, label_column, project_dir, rf_params):
+    # 预处理数据
+    data = preprocess_data(data)
+    
+    # 特征与标签分离
     X = data.drop(columns=[label_column])
     y = data[label_column]
+    
+    # 划分训练集和测试集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     
+    # 初始化模型
     model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'])
+    
+    # 训练模型
     model.fit(X_train, y_train)
     
     # 保存模型
