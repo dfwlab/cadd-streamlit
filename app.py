@@ -91,15 +91,36 @@ def train_and_save_model(data, label_column, project_dir, rf_params):
     # 特征与标签分离
     X = data.drop(columns=[label_column])
     y = data[label_column]
+
+    # 检查X和y的维度
+    st.write("特征数据(X)形状：", X.shape)
+    st.write("标签数据(y)形状：", y.shape)
+    
+    # 检查是否有空值
+    st.write("X中的空值：", X.isnull().sum().sum())
+    st.write("y中的空值：", y.isnull().sum())
+    
+    # 确保X和y没有空值
+    if X.isnull().sum().sum() > 0 or y.isnull().sum() > 0:
+        st.error("数据中存在空值，请处理后再尝试")
+        return None, None
     
     # 划分训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    try:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    except ValueError as e:
+        st.error(f"train_test_split 出错：{e}")
+        return None, None
     
     # 初始化模型
     model = RandomForestClassifier(n_estimators=rf_params['n_estimators'], max_depth=rf_params['max_depth'])
     
     # 训练模型
-    model.fit(X_train, y_train)
+    try:
+        model.fit(X_train, y_train)
+    except Exception as e:
+        st.error(f"模型训练失败：{e}")
+        return None, None
     
     # 保存模型
     model_filename = "model.pkl"
@@ -204,7 +225,7 @@ elif sidebar_option == "模型训练":
         save_input_data_with_fingerprint(data, project_dir, label_column)
         
         # 训练模型并保存结果
-        model, acc = train_and_save_model(data, label_column, project_dir, rf_params)
+        model, acc = train_and_save_model(data, 'label', project_dir, rf_params)
         
         # 显示训练结果
         st.write(f"训练完成，模型准确率：{acc:.4f}")
