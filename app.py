@@ -342,8 +342,9 @@ elif sidebar_option == "知识获取":
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
     st.write(pmcid_list)
-    for pmcid in pmcid_list[:1]:
-        article_details = fetch_article_details(pmcid)
-        st.write(pmcid)
-        st.write(article_details[0]['body'])
-        #full_text = extract_full_text(article_details)
+
+    pmcid = pmcid_list[0]
+    article_details = fetch_article_details()
+    st.write(f'Fecth article : {pmcid}')
+    st.write(article_details[0]['body'])
+    #full_text = extract_full_text(article_details)
