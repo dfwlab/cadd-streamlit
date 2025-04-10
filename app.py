@@ -249,7 +249,7 @@ elif sidebar_option == "活性预测":
                     # SHAP解释
                     explainer = shap.TreeExplainer(model)
                     shap_values = explainer.shap_values(fingerprint)
-                    shap.summary_plot(shap_values, features=fingerprint)
+                    st.pyplot(shap.summary_plot(shap_values, features=fingerprint))
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
         else:
