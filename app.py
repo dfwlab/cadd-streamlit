@@ -11,13 +11,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # 设置页面标题和图标
-st.set_page_config(page_title="Tox21数据集应用", page_icon=":test_tube:")
+st.set_page_config(page_title="Tox21数据集应用", page_icon="🔬")
 
-# 添加图标和样式到页面
+# 添加CSS样式以美化界面
 st.markdown("""
     <style>
         .css-1d391kg {background-color: #f0f4f7;}
         .sidebar .sidebar-content {background-color: #e1f5fe;}
+        .sidebar .sidebar-title {font-size: 20px; font-weight: bold; color: #00796b;}
+        .stButton>button {background-color: #00796b; color: white; border-radius: 10px; padding: 10px;}
+        .stSelectbox>div {font-size: 16px; color: #00796b;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -74,18 +77,18 @@ st.title("Tox21数据集建模与预测应用")
 # 左侧边栏选择功能
 sidebar_option = st.sidebar.selectbox(
     "选择功能",
-    ["数据展示 :bar_chart:", "模型训练 :clipboard:", "活性预测 :dna:"]
+    ["数据展示", "模型训练", "活性预测"]
 )
 
 # 功能1：展示数据
-if sidebar_option == "数据展示 :bar_chart:":
+if sidebar_option == "数据展示":
     dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])  # Example choice
     if dataset_choice == "tox21":
         data = pd.read_csv("tox21.csv")  # Replace with actual data loading code
         display_data_info(data)
 
 # 功能2：训练模型
-elif sidebar_option == "模型训练 :clipboard:":
+elif sidebar_option == "模型训练":
     dataset_choice = st.sidebar.selectbox("选择数据集", ["tox21", "其他数据集"])
     label_column = st.sidebar.text_input("输入标签列名", "tox21_label")
     
@@ -95,7 +98,7 @@ elif sidebar_option == "模型训练 :clipboard:":
             train_model(data, label_column)
 
 # 功能3：进行预测
-elif sidebar_option == "活性预测 :dna:":
+elif sidebar_option == "活性预测":
     smiles_input = st.sidebar.text_input("输入分子SMILES")
     if st.sidebar.button("进行预测"):
         predict_new_molecule(smiles_input)
