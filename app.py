@@ -21,7 +21,7 @@ from openai import OpenAI
 from io import StringIO
 
 # Set page configuration
-st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
+st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬", layout="wide")
 
 
 # --- Helper Functions ---
