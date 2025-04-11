@@ -154,6 +154,19 @@ def plot_feature_importance(importance, features, project_dir):
     plt.savefig(os.path.join(project_dir, "feature_importance.png"))
     st.image(os.path.join(project_dir, "feature_importance.png"))
 
+# 查询PubMed Central (PMC) 数据库
+def search_pmc(keyword):
+    search_term = keyword  # 输入搜索关键词
+    handle = Entrez.esearch(db="pmc", term=search_term, retmode="xml", retmax=5)  # 限制返回5篇文章
+    record = Entrez.read(handle)
+    return record["IdList"]
+
+# 获取文章详细信息
+def fetch_article_details(pmcid):
+    handle = Entrez.efetch(db="pmc", id=pmcid, retmode="text")
+    record = Entrez.read(handle)
+    return record
+
 
 # --- Streamlit UI ---
 st.title("2025CADD课程实践")
