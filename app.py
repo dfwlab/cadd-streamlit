@@ -337,9 +337,11 @@ elif sidebar_option == "活性预测":
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
 
             import streamlit.components.v1 as components
-            components.html("""
-                <iframe id="ifKetcher" src="./ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>
-            """, height=660)
+            st.markdown(
+                '<iframe id="ifKetcher" src="ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
+                unsafe_allow_html=True
+            )
+            
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
 
