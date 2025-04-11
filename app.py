@@ -338,7 +338,7 @@ elif sidebar_option == "活性预测":
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
 
             st.write("使用ketcher(streamlit-ketcher)输入和展示分子")
-            molecule = st.text_input("Molecule", "CCCCC")
+            molecule = st.text_input("Molecule", r"(C)C=C4)C4=N/C(=C(/C5=CC=CC(C(N)=O)=C5)C5=CC=C2N5)C=C4)N3)C=C1")
             smile_code = st_ketcher(molecule)
             st.markdown(f"Smile code: ``{smile_code}``")
             
