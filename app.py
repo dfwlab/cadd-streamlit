@@ -337,6 +337,7 @@ elif sidebar_option == "活性预测":
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
 
             import streamlit.components.v1 as components
+            import base64
             # 获取完整的 HTML 路径
             html_path = os.path.join("ketcher", "index.html")
             
