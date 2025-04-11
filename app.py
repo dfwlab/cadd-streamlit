@@ -305,8 +305,6 @@ elif sidebar_option == "查看已有项目":
 
 # 功能5:知识获取
 elif sidebar_option == "知识获取":
-    key = st.text_input("请输入您的OpenAI Key", "")
-    
     # 设置Entrez邮箱
     Entrez.email = "your_email@example.com"
     keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
@@ -324,7 +322,7 @@ elif sidebar_option == "知识获取":
     # 文献内容，假设已经以字符串形式提取
     document_text = str(article_details[0]['body']['sec'])
 
-    key = None
+    key = st.text_input("请输入您的OpenAI Key用于解析文献知识", "")
     if key:
         os.environ["OPENAI_API_KEY"] = key
         client = OpenAI()
