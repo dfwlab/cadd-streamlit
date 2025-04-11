@@ -323,7 +323,8 @@ elif sidebar_option == "知识获取":
     st.write(article_details[0]['body']['sec'])
     
     for i in article_details[0]['body']['sec']:
-        st.write(i['p'])
+        for j in i['p']:
+            st.write(j.replace('\n', ''))
     #full_text = ""
     #for p in body.iter("p"):
     #    full_text += (p.text or "") + "\n"
