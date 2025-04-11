@@ -169,7 +169,6 @@ def fetch_article_details(pmcid):
 
 
 # --- Streamlit UI ---
-st.title("2025CADD课程实践")
 sidebar_option = st.sidebar.selectbox("选择功能", ["首页", "数据展示", "模型训练", "活性预测", "查看已有项目", "知识获取"])
 
 # 首页
@@ -264,6 +263,7 @@ if sidebar_option == "首页":
 
 # 功能1: 展示数据
 elif sidebar_option == "数据展示":
+    st.title("数据展示")
     csv_files = glob.glob("./data/*.csv")
     dataset_choice = st.sidebar.selectbox("选择数据集", [os.path.basename(file) for file in csv_files])
     selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
@@ -272,6 +272,7 @@ elif sidebar_option == "数据展示":
 
 # 功能2: 模型训练
 elif sidebar_option == "模型训练":
+    st.title("模型训练")
     csv_files = glob.glob("./data/*.csv")
     dataset_choice = st.sidebar.selectbox("选择数据集", [os.path.basename(file) for file in csv_files])
     selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
@@ -293,6 +294,7 @@ elif sidebar_option == "模型训练":
 
 # 功能3: 活性预测
 elif sidebar_option == "活性预测":
+    st.title("活性预测")
     # List trained projects
     projects = glob.glob('./projects/*')
     if not projects:
@@ -330,6 +332,7 @@ elif sidebar_option == "活性预测":
 
 # 功能4: 查看已有项目
 elif sidebar_option == "查看已有项目":
+    st.title("查看已有项目")
     projects = glob.glob('./projects/*')
     if not projects:
         st.write("没有找到项目")
@@ -353,6 +356,7 @@ elif sidebar_option == "查看已有项目":
 
 # 功能5: 知识获取
 elif sidebar_option == "知识获取":
+    st.title("知识获取")
     # Set up Entrez email for PubMed search
     Entrez.email = "your_email@example.com"
     keyword = '"Clinical Toxicology" and "Chemical"'  # Search term
