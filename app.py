@@ -323,7 +323,8 @@ elif sidebar_option == "知识获取":
     st.info(f'摘要: {abstract}')
     # 文献内容，假设已经以字符串形式提取
     document_text = str(article_details[0]['body']['sec'])
-    
+
+    key = None
     if key:
         os.environ["OPENAI_API_KEY"] = key
         client = OpenAI()
