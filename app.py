@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_ketcher import st_ketcher
 import pandas as pd
 import os
 import re
@@ -335,6 +336,11 @@ elif sidebar_option == "活性预测":
                     st.pyplot(fig)
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
+
+            st.write("使用ketcher(streamlit-ketcher)输入和展示分子")
+            molecule = st.text_input("Molecule", DEFAULT_MOL)
+            smile_code = st_ketcher(molecule)
+            st.markdown(f"Smile code: ``{smile_code}``")
             
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
