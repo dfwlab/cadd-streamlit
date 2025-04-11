@@ -347,7 +347,7 @@ elif sidebar_option == "知识获取":
         st.write("提示词工程:")
         query = """请从文献中提取与毒副作用相关的化合物名字，别名或其结构等信息：\n
         仅输出获取的信息，不要输出额外的文字，英文回复，输出结果格式为：化合物名字,类型,结构,毒副作用；\n
-        仅输出能从本文中得到的信息，本文缺失的信息输出为空，参考如下：\n
+        仅输出能从本文中得到的信息，本文缺失的信息输出为空，按照CSV格式输出，参考如下：\n
         cocaine,Drug,CN1[C@H]2CC[C@@H]1[C@H]([C@H](C2)OC(=O)C3=CC=CC=C3)C(=O)OC,developmental toxicity and female reproductive toxicity\n
         Amphetamines,Drug class,,\n
         以下为文献信息:\n
