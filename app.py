@@ -21,7 +21,7 @@ from openai import OpenAI
 from io import StringIO
 
 # Set page configuration
-st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬", layout="wide")
+st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
 
 
 # --- Helper Functions ---
@@ -224,7 +224,7 @@ if sidebar_option == "首页":
         st.markdown("""
             <div class="card" onclick="window.location.href='/model_training'">
                 <div class="card-title">模型训练</div>
-                <div class="card-description">训练机器学习模型并评估性能，包括AUC曲线和混淆矩阵。</div>
+                <div class="card-description">训练机器学习模型并评估性能(AUC曲线等)。</div>
             </div>
         """, unsafe_allow_html=True)
     
@@ -232,7 +232,7 @@ if sidebar_option == "首页":
         st.markdown("""
             <div class="card" onclick="window.location.href='/activity_prediction'">
                 <div class="card-title">活性预测</div>
-                <div class="card-description">输入SMILES并进行化合物活性预测，获取SHAP特征解释。</div>
+                <div class="card-description">输入SMILES并进行化合物活性预测，进行SHAP解释。</div>
             </div>
         """, unsafe_allow_html=True)
     
