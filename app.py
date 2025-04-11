@@ -347,10 +347,10 @@ elif sidebar_option == "知识获取":
         # 提问模型以获取化合物的毒副作用信息（few-shot）
         st.write("提示词工程:")
         query = """请从文献中提取与毒副作用相关的化合物名字，别名或其结构等信息：\n
-        仅输出获取的信息，不要输出额外的文字，英文回复，输出结果格式为：化合物名字,类型,结构,毒副作用；\n
-        仅输出能从本文中得到的信息，本文缺失的信息输出为空，按照CSV格式输出，参考如下：\n
-        cocaine,Drug,CN1[C@H]2CC[C@@H]1[C@H]([C@H](C2)OC(=O)C3=CC=CC=C3)C(=O)OC,developmental toxicity and female reproductive toxicity\n
-        Amphetamines,Drug class,,\n
+        仅输出获取的信息，不要输出额外的文字，英文回复，输出结果格式为：化合物\t类型\t结构\t毒副作用\n
+        仅输出能从本文中得到的信息，本文缺失的信息输出为空，按照TSV格式输出，参考如下：\n
+        cocaine\tDrug\tCN1[C@H]2CC[C@@H]1[C@H]([C@H](C2)OC(=O)C3=CC=CC=C3)C(=O)OC\tdevelopmental toxicity and female reproductive toxicity\n
+        Amphetamines\tDrug class\t\t\n
         以下为文献信息:\n
         """ + document_text.replace('\n', '').replace('\n', '')[:10000]
         #st.write(query)
@@ -360,8 +360,8 @@ elif sidebar_option == "知识获取":
         )
         st.write(response.output_text)
         try:
-            data = StringIO(response.output_text)
-            df = pd.read_csv(data, columns=['化合物', '类型', '结构', '毒副作用'])
+            data = StringIO("化合物\t类型\t结构\t毒副作用\n"+response.output_text)
+            df = pd.read_csv(data, sep='\t')
             st.dataframe(df)
         except:
             st.write("输出格式错误，无法解析为csv表格")
