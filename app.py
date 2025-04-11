@@ -319,13 +319,10 @@ elif sidebar_option == "活性预测":
             model = joblib.load(model_filename)
             st.write(f"加载模型：{model_filename}")
 
-            # Input SMILES for prediction
-            #smiles_input = st.text_input("输入分子SMILES")
-            with st.echo():
-                #st.write("使用ketcher(streamlit-ketcher)输入和展示分子")
-                molecule = st.text_input("输入分子SMILES", r"C1C=CC(C)=C(CC2C=C(CCC)C=C2)C=1")
-                smile_code = st_ketcher(molecule)
-                st.markdown(f"Smile code: ``{smile_code}``")
+            # Input SMILES (by ketcher) for prediction
+            molecule = st.text_input("输入分子SMILES", r"C1C=CC(C)=C(CC2C=C(CCC)C=C2)C=1")
+            smile_code = st_ketcher(molecule)
+            st.markdown(f"Smile code: ``{smile_code}``")
             
             if smile_code:
                 fingerprint = mol_to_fp(smile_code)
