@@ -214,7 +214,7 @@ if sidebar_option == "首页":
     # Define the clickable cards (functionality links)
     with col1:
         st.markdown("""
-            <div class="card" onclick="window.location.href='/data_display'">
+            <div class="card" onclick="window.location.href='#'">
                 <div class="card-title">数据展示</div>
                 <div class="card-description">查看数据集概况并生成相关的统计图表。</div>
             </div>
@@ -222,7 +222,7 @@ if sidebar_option == "首页":
     
     with col2:
         st.markdown("""
-            <div class="card" onclick="window.location.href='/model_training'">
+            <div class="card" onclick="window.location.href='#'">
                 <div class="card-title">模型训练</div>
                 <div class="card-description">训练机器学习模型并评估性能(AUC曲线等)。</div>
             </div>
@@ -230,7 +230,7 @@ if sidebar_option == "首页":
     
     with col3:
         st.markdown("""
-            <div class="card" onclick="window.location.href='/activity_prediction'">
+            <div class="card" onclick="window.location.href='#'">
                 <div class="card-title">活性预测</div>
                 <div class="card-description">输入SMILES并进行化合物活性预测，进行SHAP解释。</div>
             </div>
@@ -240,7 +240,7 @@ if sidebar_option == "首页":
     
     with col1:
         st.markdown("""
-            <div class="card" onclick="window.location.href='/existing_projects'">
+            <div class="card" onclick="window.location.href='#'">
                 <div class="card-title">查看已有项目</div>
                 <div class="card-description">查看您之前创建的项目和模型评估结果。</div>
             </div>
@@ -248,9 +248,17 @@ if sidebar_option == "首页":
     
     with col2:
         st.markdown("""
-            <div class="card" onclick="window.location.href='/knowledge_retrieval'">
+            <div class="card" onclick="window.location.href='#'">
                 <div class="card-title">知识获取</div>
                 <div class="card-description">获取文献中的毒副作用信息，支持文献摘要提取。</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='#'">
+                <div class="card-title">其他功能</div>
+                <div class="card-description">补充其他计算机辅助药物设计相关功能。</div>
             </div>
         """, unsafe_allow_html=True)
     
