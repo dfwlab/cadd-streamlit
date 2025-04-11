@@ -320,15 +320,15 @@ elif sidebar_option == "知识获取":
     abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
     st.info(f'题目: {title}')
     st.info(f'摘要: {abstract}')
-    st.text_area("全文", article_details, height=300)
+    #st.text_area("全文", article_details[0]['body'], height=300)
+    st.write(article_details[0]['body']['sec'])
     
     # 解析 XML 数据
-    root = ET.fromstring(article_details)
+    root = ET.fromstring(article_details[0]['body']['sec'])
     # 提取文本（根据 PMC XML 格式，提取 <body> 中的文本）
     full_text = ""
-    for body in root.iter("body"):
-        for p in body.iter("p"):
-            full_text += (p.text or "") + "\n"
+    for p in body.iter("p"):
+        full_text += (p.text or "") + "\n"
     st.text_area("全文", full_text, height=300)
 
     key = st.text_input("请输入您的OpenAI Key用于解析文献知识", "")
