@@ -8,3 +8,4 @@ rdkit
 shap
 biopython
 openai
+streamlit-ketcher
