@@ -199,18 +199,9 @@ def search_pmc(keyword):
 
 # 获取文章详细信息
 def fetch_article_details(pmcid):
-    handle = Entrez.efetch(db="pmc", id=pmcid, retmode="xml")
+    handle = Entrez.efetch(db="pmc", id=pmcid, retmode="text")
     record = Entrez.read(handle)
     return record
-
-# 获取全文链接
-def extract_full_text(article_record):
-    # 根据具体的XML结构提取文本部分
-    full_text = ""
-    for article in article_record:
-        for body in article.get("body", []):
-            full_text += body.get("text", "")
-    return full_text
 
 
 
@@ -321,14 +312,13 @@ elif sidebar_option == "知识获取":
     keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
-    st.write(pmcid_list)
+    st.write(f'搜索到的相关文献(前五篇):{pmcid_list.values}')
 
-    pmcid = pmcid_list[0]
+    pmcid = '11966747'
     article_details = fetch_article_details(pmcid)
     st.write(f'Fecth article : {pmcid}')
-    st.write(article_details[0]['body']['sec'])
-    #full_text = extract_full_text(article_details)
-
+    st.write(article_details[0])
+    key=None
     if key:
         os.environ["OPENAI_API_KEY"] = key
         client = OpenAI()
