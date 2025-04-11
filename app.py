@@ -266,7 +266,7 @@ if sidebar_option == "首页":
     # Footer
     st.markdown("""
         <footer style="text-align: center; margin-top: 50px;">
-            <p style="font-size: 14px; color: #888;">© 2025 计算机辅助药物设计课程实践平台 | 由团队开发</p>
+            <p style="font-size: 14px; color: #888;">© 2025 计算机辅助药物设计课程实践平台 | 由TJCADD团队开发</p>
         </footer>
     """, unsafe_allow_html=True)
 
