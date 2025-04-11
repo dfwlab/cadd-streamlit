@@ -316,21 +316,21 @@ elif sidebar_option == "知识获取":
 
     pmcid = '11966747'
     article_details = fetch_article_details(pmcid)
-    st.write(f'获取文献信息: {pmcid}')
+    st.write(f'从PMC获取文献"{pmcid}"全文: ')
     title = article_details[0]['front']['article-meta']['title-group']['article-title'].replace('\n', '')
     abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
     st.info(f'题目: {title}')
     st.info(f'摘要: {abstract}')
+    # 文献内容，假设已经以字符串形式提取
+    document_text = str(article_details[0]['body']['sec'])
     
-    key=None
     if key:
         os.environ["OPENAI_API_KEY"] = key
         client = OpenAI()
-        # 文献内容，假设已经以字符串形式提取
-        document_text = str(article_details[0]['body']['sec'])
+        
         # 提问模型以获取化合物的毒副作用信息
         st.write("常规提问:")
-        query = """请从以下文献中提取与毒副作用相关的化合物名字，别名或其结构等信息：\n""" + document_text.replace('\n', '').replace('\n', '')[:10000]
+        query = """请从以下文献中提取与毒副作用相关的化合物信息，包括名字，类型和毒副作用描述：\n""" + abstract
         #st.write(query)
         response = client.responses.create(
             model="gpt-4",
@@ -340,13 +340,16 @@ elif sidebar_option == "知识获取":
         #####
         # 提问模型以获取化合物的毒副作用信息（few-shot）
         st.write("提示词工程:")
-        query = """请从文献中提取与毒副作用相关的化合物名字，别名或其结构等信息：\n
-        仅输出获取的信息，不要输出额外的文字，英文回复，输出结果格式为：化合物\t类型\t结构\t毒副作用\n
-        仅输出能从本文中得到的信息，本文缺失的信息输出为空，按照TSV格式输出，参考如下：\n
-        cocaine\tDrug\tCN1[C@H]2CC[C@@H]1[C@H]([C@H](C2)OC(=O)C3=CC=CC=C3)C(=O)OC\tdevelopmental toxicity and female reproductive toxicity\n
-        Amphetamines\tDrug class\t\t\n
-        以下为文献信息:\n
-        """ + document_text.replace('\n', '').replace('\n', '')[:10000]
+        query = """请从文献中提取与毒副作用相关的化合物信息,要求如下：\n
+        1. 仅输出获取的信息，不要输出额外的文字，英文回复;\n
+        2. 按照TSV格式输出结果，格式为："化合物\t类型\t毒副作用";\n
+        3. 仅输出能从本文中得到的信息，本文缺失的信息输出为空;\n
+        Examples:\n
+        cocaine\tDrug\tDevelopmental toxicity and female reproductive toxicity\n
+        Amphetamines\tDrug class\t\n
+        End examples\n
+        文献信息为:\n
+        """ + abstract
         #st.write(query)
         response = client.responses.create(
             model="gpt-4",
@@ -354,7 +357,7 @@ elif sidebar_option == "知识获取":
         )
         st.write(response.output_text)
         try:
-            data = StringIO("化合物\t类型\t结构\t毒副作用\n"+response.output_text)
+            data = StringIO("化合物\t类型\t毒副作用\n"+response.output_text)
             df = pd.read_csv(data, sep='\t')
             st.dataframe(df)
         except:
