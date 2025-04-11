@@ -319,7 +319,8 @@ elif sidebar_option == "知识获取":
     st.write(f'获取文献信息: {pmcid}')
     title = article_details[0]['front']['article-meta']['title-group']['article-title'].replace('\n', '')
     abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
-    #st.write(article_details[0])
+    st.info(f'题目: {title}')
+    st.info(f'摘要: {abstract}')
     
     key=None
     if key:
