@@ -336,8 +336,8 @@ elif sidebar_option == "活性预测":
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
 
-            #import streamlit.components.v1 as components
-            st.components.html(open('ketcher/index.html').read())
+            import streamlit.components.v1 as components
+            components.html(open('ketcher/index.html').read())
             
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
