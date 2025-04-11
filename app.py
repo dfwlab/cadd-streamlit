@@ -312,7 +312,7 @@ elif sidebar_option == "知识获取":
     keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
-    st.write(f'搜索到的相关文献(前五篇):{pmcid_list.values}')
+    st.write(f'搜索到的相关文献(前五篇):{list(pmcid_list)}')
 
     pmcid = '11966747'
     article_details = fetch_article_details(pmcid)
