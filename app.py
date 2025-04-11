@@ -19,7 +19,6 @@ import shap
 from Bio import Entrez
 from openai import OpenAI
 from io import StringIO
-import xml.etree.ElementTree as ET
 
 # 设置页面标题和图标
 st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
@@ -323,13 +322,12 @@ elif sidebar_option == "知识获取":
     #st.text_area("全文", article_details[0]['body'], height=300)
     st.write(article_details[0]['body']['sec'])
     
-    # 解析 XML 数据
-    root = ET.fromstring(article_details[0]['body']['sec'])
-    # 提取文本（根据 PMC XML 格式，提取 <body> 中的文本）
-    full_text = ""
-    for p in body.iter("p"):
-        full_text += (p.text or "") + "\n"
-    st.text_area("全文", full_text, height=300)
+    for i in article_details[0]['body']['sec']:
+        st.write(i['p'])
+    #full_text = ""
+    #for p in body.iter("p"):
+    #    full_text += (p.text or "") + "\n"
+    #st.text_area("全文", full_text, height=300)
 
     key = st.text_input("请输入您的OpenAI Key用于解析文献知识", "")
     if key:
