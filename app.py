@@ -335,11 +335,9 @@ elif sidebar_option == "活性预测":
                     st.pyplot(fig)
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
-                    
-            st.markdown(
-                '<iframe id="ifKetcher" src="https://lifescience.opensource.epam.com/KetcherDemoSA/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
-                unsafe_allow_html=True
-            )
+
+            #import streamlit.components.v1 as components
+            st.components.html(open('ketcher/index.html').read())
             
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
