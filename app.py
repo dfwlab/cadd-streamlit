@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
-from rdkit.Chem import Chem, DataStructs
+from rdkit import Chem, DataStructs
 from rdkit.Chem import rdFingerprintGenerator
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
