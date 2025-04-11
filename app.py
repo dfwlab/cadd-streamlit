@@ -323,7 +323,7 @@ elif sidebar_option == "知识获取":
     full_text = ""
     for i in article_details[0]['body']['sec']:
         for j in i['p']:
-            full_text += re.sub(r'<.*?>', '', j.replace('\n', ''))
+            full_text += re.sub(r'<.*?>', '', j.replace('\n', ''))+'\n'
     st.text_area("全文", full_text, height=300)
 
     key = st.text_input("请输入您的OpenAI Key用于解析文献知识", "")
