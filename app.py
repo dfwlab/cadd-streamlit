@@ -320,9 +320,15 @@ elif sidebar_option == "活性预测":
             st.write(f"加载模型：{model_filename}")
 
             # Input SMILES for prediction
-            smiles_input = st.text_input("输入分子SMILES")
-            if smiles_input:
-                fingerprint = mol_to_fp(smiles_input)
+            #smiles_input = st.text_input("输入分子SMILES")
+            with st.echo():
+                #st.write("使用ketcher(streamlit-ketcher)输入和展示分子")
+                molecule = st.text_input("输入分子SMILES", r"C1C=CC(C)=C(CC2C=C(CCC)C=C2)C=1")
+                smile_code = st_ketcher(molecule)
+                st.markdown(f"Smile code: ``{smile_code}``")
+            
+            if smile_code:
+                fingerprint = mol_to_fp(smile_code)
                 if fingerprint is not None:
                     prediction = model.predict([fingerprint])
                     prob = model.predict_proba([fingerprint])[:, -1]
@@ -336,12 +342,6 @@ elif sidebar_option == "活性预测":
                     st.pyplot(fig)
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
-
-            st.write("使用ketcher(streamlit-ketcher)输入和展示分子")
-            molecule = st.text_input("Molecule", r"C1C=CC(C)=C(CC2C=C(CCC)C=C2)C=1")
-            smile_code = st_ketcher(molecule)
-            st.markdown(f"Smile code: ``{smile_code}``")
-            
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
 
