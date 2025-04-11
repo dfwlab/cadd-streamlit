@@ -338,7 +338,7 @@ elif sidebar_option == "活性预测":
 
             import streamlit.components.v1 as components
             st.markdown(
-                '<iframe id="ifKetcher" src="http://localhost/ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
+                '<iframe id="ifKetcher" src="https://cadd-app-2025.streamlit.app/ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
                 unsafe_allow_html=True
             )
             
