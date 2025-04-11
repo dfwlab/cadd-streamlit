@@ -170,11 +170,100 @@ def fetch_article_details(pmcid):
 
 # --- Streamlit UI ---
 st.title("2025CADD课程实践")
+sidebar_option = st.sidebar.selectbox("选择功能", ["首页", "数据展示", "模型训练", "活性预测", "查看已有项目", "知识获取"])
 
-sidebar_option = st.sidebar.selectbox("选择功能", ["数据展示", "模型训练", "活性预测", "查看已有项目", "知识获取"])
+# 首页
+if sidebar_option == "首页":
+    # Set header
+    st.markdown("""
+        <h1 style="text-align: center; color: #4CAF50;">2025CADD课程实践</h1>
+        <p style="text-align: center; font-size: 18px; color: #555;">欢迎来到我们的计算机辅助药物设计平台！选择您感兴趣的功能开始使用。</p>
+    """, unsafe_allow_html=True)
+    # Add some styling
+    st.markdown("""
+        <style>
+            .card {
+                background-color: #f9f9f9;
+                border: 2px solid #d1d1d1;
+                border-radius: 10px;
+                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                margin-top: 20px;
+                text-align: center;
+                font-size: 16px;
+            }
+            .card:hover {
+                background-color: #e8f4f8;
+                cursor: pointer;
+            }
+            .card-title {
+                font-size: 20px;
+                font-weight: bold;
+                color: #4CAF50;
+            }
+            .card-description {
+                color: #666;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Add columns for a cleaner layout
+    col1, col2, col3 = st.columns(3)
+    
+    # Define the clickable cards (functionality links)
+    with col1:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='/data_display'">
+                <div class="card-title">数据展示</div>
+                <div class="card-description">查看数据集概况并生成相关的统计图表。</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='/model_training'">
+                <div class="card-title">模型训练</div>
+                <div class="card-description">训练机器学习模型并评估性能，包括AUC曲线和混淆矩阵。</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='/activity_prediction'">
+                <div class="card-title">活性预测</div>
+                <div class="card-description">输入SMILES并进行化合物活性预测，获取SHAP特征解释。</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='/existing_projects'">
+                <div class="card-title">查看已有项目</div>
+                <div class="card-description">查看您之前创建的项目和模型评估结果。</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+            <div class="card" onclick="window.location.href='/knowledge_retrieval'">
+                <div class="card-title">知识获取</div>
+                <div class="card-description">获取文献中的毒副作用信息，支持文献摘要提取。</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    # Footer
+    st.markdown("""
+        <footer style="text-align: center; margin-top: 50px;">
+            <p style="font-size: 14px; color: #888;">© 2025 计算机辅助药物设计课程实践平台 | 由团队开发</p>
+        </footer>
+    """, unsafe_allow_html=True)
 
 # 功能1: 展示数据
-if sidebar_option == "数据展示":
+elif sidebar_option == "数据展示":
     csv_files = glob.glob("./data/*.csv")
     dataset_choice = st.sidebar.selectbox("选择数据集", [os.path.basename(file) for file in csv_files])
     selected_file = csv_files[[os.path.basename(file) for file in csv_files].index(dataset_choice)]
