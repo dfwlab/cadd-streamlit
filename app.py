@@ -337,8 +337,22 @@ elif sidebar_option == "活性预测":
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
 
             import streamlit.components.v1 as components
-            with open("ketcher/index.html", "r", encoding="utf-8") as f:
-                components.html(f.read(), height=700)
+            # 获取完整的 HTML 路径
+            html_path = os.path.join("ketcher", "index.html")
+            
+            # 读取 HTML 文件内容
+            with open(html_path, "r", encoding="utf-8") as f:
+                html_content = f.read()
+            
+            # 将 HTML 内容转换为 base64 编码
+            encoded_html = base64.b64encode(html_content.encode("utf-8")).decode()
+            
+            # 创建 data URI 链接
+            data_uri = f"data:text/html;base64,{encoded_html}"
+            
+            # 在 Streamlit 中嵌入 iframe
+            st.title("Ketcher 分子结构编辑器")
+            components.iframe(data_uri, height=800, width=1200)
             
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
