@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import re
 import glob
 import joblib
 import random
@@ -319,16 +320,11 @@ elif sidebar_option == "知识获取":
     abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
     st.info(f'题目: {title}')
     st.info(f'摘要: {abstract}')
-    #st.text_area("全文", article_details[0]['body'], height=300)
-    st.write(article_details[0]['body']['sec'])
-    
+    full_text = ""
     for i in article_details[0]['body']['sec']:
         for j in i['p']:
-            st.write(j.replace('\n', ''))
-    #full_text = ""
-    #for p in body.iter("p"):
-    #    full_text += (p.text or "") + "\n"
-    #st.text_area("全文", full_text, height=300)
+            full_text += re.sub(r'<.*?>', '', j.replace('\n', ''))
+    st.text_area("全文", full_text, height=300)
 
     key = st.text_input("请输入您的OpenAI Key用于解析文献知识", "")
     if key:
