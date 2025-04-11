@@ -335,10 +335,9 @@ elif sidebar_option == "活性预测":
                     st.pyplot(fig)
                 else:
                     st.write("无法解析该SMILES字符串，请输入有效的SMILES。")
-
-            import streamlit.components.v1 as components
+                    
             st.markdown(
-                '<iframe id="ifKetcher" src="https://cadd-app-2025.streamlit.app/ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
+                '<iframe id="ifKetcher" src="https://lifescience.opensource.epam.com/KetcherDemoSA/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>',
                 unsafe_allow_html=True
             )
             
