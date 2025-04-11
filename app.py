@@ -320,6 +320,7 @@ elif sidebar_option == "知识获取":
     abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
     st.info(f'题目: {title}')
     st.info(f'摘要: {abstract}')
+     st.text_area("全文", article_details, height=300)
     # 解析 XML 数据
     root = ET.fromstring(article_details)
     # 提取文本（根据 PMC XML 格式，提取 <body> 中的文本）
