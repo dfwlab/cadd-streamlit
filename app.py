@@ -18,6 +18,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 import shap
 from Bio import Entrez
 from openai import OpenAI
+from io import StringIO
 
 # 设置页面标题和图标
 st.set_page_config(page_title="2025CADD课程实践", page_icon="🔬")
@@ -358,3 +359,9 @@ elif sidebar_option == "知识获取":
             input=query
         )
         st.write(response.output_text)
+        try:
+            data = StringIO(response.output_text)
+            df = pd.read_csv(data, columns=['化合物', '类型', '结构', '毒副作用'])
+            st.dataframe(df)
+        except:
+            st.write("输出格式错误，无法解析为csv表格")
