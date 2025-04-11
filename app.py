@@ -312,12 +312,15 @@ elif sidebar_option == "知识获取":
     keyword = '"Clinical Toxicology" and "Chemical"'  # 搜索关键词
     pmcid_list = search_pmc(keyword)
     st.write(f"关键词: {keyword}")
-    st.write(f'搜索到的相关文献(前五篇):{list(pmcid_list)}')
+    st.write(f'搜索到的相关文献(前五篇): {list(pmcid_list)}')
 
     pmcid = '11966747'
     article_details = fetch_article_details(pmcid)
-    st.write(f'Fecth article : {pmcid}')
-    st.write(article_details[0])
+    st.write(f'获取文献信息: {pmcid}')
+    title = article_details[0]['front']['article-meta']['title-group']['article-title'].replace('\n', '')
+    abstract = article_details[0]['front']['article-meta']['abstract'][0]['p'][1].replace('\n', '')
+    #st.write(article_details[0])
+    
     key=None
     if key:
         os.environ["OPENAI_API_KEY"] = key
