@@ -338,7 +338,7 @@ elif sidebar_option == "活性预测":
 
             import streamlit.components.v1 as components
             components.html("""
-                <iframe id="ifKetcher" src="http://localhost:8501/ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>
+                <iframe id="ifKetcher" src="./ketcher/index.html" width="100%" height="650" style="border: 1px solid #ccc; border-radius: 10px;"></iframe>
             """, height=660)
         else:
             st.write("没有找到模型文件，请确保该项目已训练并保存模型。")
