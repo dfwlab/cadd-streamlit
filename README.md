@@ -1,4 +1,4 @@
-# cadd-streamlit
+# CADD-Streamlit
 
 ### 2025同济大学计算机辅助蛋白质和药物设计课程案例
 
