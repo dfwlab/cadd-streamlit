@@ -176,7 +176,7 @@ sidebar_option = st.sidebar.selectbox("选择功能", ["首页", "数据展示",
 if sidebar_option == "首页":
     # Set header
     st.markdown("""
-        <h1 style="text-align: center; color: #4CAF50;">2025CADD课程实践</h1>
+        <h1 style="text-align: center; color: #4CAF50;">CADD课程实践</h1>
         <p style="text-align: center; font-size: 18px; color: #555;">欢迎来到我们的计算机辅助药物设计平台！选择您感兴趣的功能开始使用。</p>
     """, unsafe_allow_html=True)
     # Add some styling
